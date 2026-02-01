@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 function App() {
   // --- CONFIG & DYNAMIC OBJECTIVES ---
-  const [config, setConfig] = useState({ basePoints: 1000, timeoutDeduction: 100, penaltyDeduction: 50 });
+  const [config] = useState({ basePoints: 1000, timeoutDeduction: 100, penaltyDeduction: 50 });
   const [objectives, setObjectives] = useState([
     { id: 1, name: 'The Slalom', pts: 100 },
     { id: 2, name: 'Ramp Climb', pts: 150 },
