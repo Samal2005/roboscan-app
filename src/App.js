@@ -83,13 +83,14 @@ function App() {
     card: { backgroundColor: theme.card, borderRadius: '24px', padding: '20px', border: `1px solid ${theme.border}`, marginBottom: '15px' },
     input: { width: '100%', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.cyan, padding: '12px', borderRadius: '12px', marginBottom: '10px', outline: 'none' },
     photoSlot: { flex: 1, height: '120px', backgroundColor: theme.header, borderRadius: '16px', border: `1px dashed ${theme.border}`, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', position: 'relative' },
-    statusCircle: (active, color) => ({ width: '32px', height: '32px', borderRadius: '50%', border: `1px solid ${active ? color : '#334155'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: active ? color : '#334155', cursor: 'pointer', backgroundColor: active ? color + '22' : 'transparent' })
+    statusCircle: (active, color) => ({ width: '32px', height: '32px', borderRadius: '50%', border: `1px solid ${active ? color : '#334155'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: active ? color : '#334155', cursor: 'pointer', backgroundColor: active ? color + '22' : 'transparent' }),
+    adjBtn: { width: '30px', height: '30px', borderRadius: '8px', border: `1px solid ${theme.border}`, background: theme.header, color: theme.text, fontWeight: 'bold', cursor: 'pointer' }
   };
 
   return (
     <div style={styles.container}>
       
-      {/* 1. COMMAND DECK (UPDATED) */}
+      {/* 1. COMMAND DECK */}
       {screen === 'home' && (
         <div>
           <h1 style={{fontSize:'24px', fontWeight:'900'}}>COMMAND <span style={{color:theme.cyan}}>DECK</span></h1>
@@ -131,10 +132,10 @@ function App() {
         </div>
       )}
 
-      {/* 3. SCORING PAGE (PARTIAL COMPLETION ADDED) */}
+      {/* 3. SCORING PAGE */}
       {screen === 'scoring' && selectedUnit && (
         <div>
-          <div style={{...styles.card, display:'flex', justifyContent:'space-between', backgroundColor:theme.header}}>
+          <div style={{...styles.card, display:'flex', justifyContent:'space-between', backgroundColor:theme.header, position:'sticky', top:0, zIndex:10}}>
             <div><div style={{fontWeight:'bold'}}>{selectedUnit.name}</div><div style={{fontSize:'10px', color:theme.grey}}>UNIT ID: {selectedUnit.id}</div></div>
             <div style={{textAlign:'right'}}><div style={{fontSize:'10px', color:theme.grey}}>LIVE SCORE</div><div style={{fontSize:'28px', fontWeight:'900', color:theme.cyan}}>{liveScore()}</div></div>
           </div>
@@ -150,17 +151,43 @@ function App() {
             </label>
           </div>
 
+          {/* DYNAMIC STOPWATCH */}
           <div style={styles.card}>
             <div style={{fontSize:'42px', fontWeight:'900', textAlign:'center', fontFamily:'monospace'}}>{time.toFixed(2)}s</div>
-            <button onClick={()=>setIsRunning(!isRunning)} style={{width:'100%', padding:'15px', background:isRunning?theme.red:theme.green, border:'none', borderRadius:'12px', color:'white', fontWeight:'bold', marginTop:'10px'}}>{isRunning?'PAUSE MISSION':'START MISSION'}</button>
+            <button 
+                onClick={()=>setIsRunning(!isRunning)} 
+                style={{
+                    width:'100%', 
+                    padding:'15px', 
+                    background: isRunning ? theme.red : (time > 0 ? theme.amber : theme.green), 
+                    border:'none', 
+                    borderRadius:'12px', 
+                    color:'white', 
+                    fontWeight:'bold', 
+                    marginTop:'10px'
+                }}
+            >
+              {isRunning ? 'PAUSE MISSION' : (time > 0 ? 'RESUME MISSION' : 'START MISSION')}
+            </button>
           </div>
 
+          {/* ADJUSTABLE PENALTIES & TIMEOUTS */}
           <div style={{display:'flex', gap:'10px', marginBottom:'15px'}}>
-            <div onClick={()=>setTimeouts(t=>t+1)} style={{...styles.card, flex:1, margin:0, textAlign:'center'}}>
-              <div style={{fontSize:'24px', fontWeight:'900'}}>{timeouts}</div><div style={{fontSize:'9px', color:theme.grey}}>TIMEOUTS</div>
+            <div style={{...styles.card, flex:1, margin:0, textAlign:'center'}}>
+              <div style={{fontSize:'9px', color:theme.grey, marginBottom:'5px'}}>TIMEOUTS</div>
+              <div style={{display:'flex', alignItems:'center', justifyContent:'space-around'}}>
+                <button style={styles.adjBtn} onClick={()=>setTimeouts(t => Math.max(0, t-1))}>-</button>
+                <span style={{fontSize:'22px', fontWeight:'900'}}>{timeouts}</span>
+                <button style={styles.adjBtn} onClick={()=>setTimeouts(t => t+1)}>+</button>
+              </div>
             </div>
-            <div onClick={()=>setPenalties(p=>p+1)} style={{...styles.card, flex:1, margin:0, textAlign:'center'}}>
-              <div style={{fontSize:'24px', fontWeight:'900', color:theme.red}}>{penalties}</div><div style={{fontSize:'9px', color:theme.red}}>PENALTIES</div>
+            <div style={{...styles.card, flex:1, margin:0, textAlign:'center'}}>
+              <div style={{fontSize:'9px', color:theme.red, marginBottom:'5px'}}>PENALTIES</div>
+              <div style={{display:'flex', alignItems:'center', justifyContent:'space-around'}}>
+                <button style={styles.adjBtn} onClick={()=>setPenalties(p => Math.max(0, p-1))}>-</button>
+                <span style={{fontSize:'22px', fontWeight:'900', color:theme.red}}>{penalties}</span>
+                <button style={styles.adjBtn} onClick={()=>setPenalties(p => p+1)}>+</button>
+              </div>
             </div>
           </div>
 
@@ -210,7 +237,7 @@ function App() {
         </div>
       )}
 
-      {/* 5. HALL OF GLORY (CSV EXPORT ADDED) */}
+      {/* 5. HALL OF GLORY */}
       {screen === 'stats' && (
         <div>
           <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'20px'}}>
