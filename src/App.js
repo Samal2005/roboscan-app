@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 function App() {
-  // --- CONFIG & DYNAMIC OBJECTIVES ---
+ 
   const [config] = useState({ basePoints: 1000, timeoutDeduction: 100, penaltyDeduction: 50 });
   const [objectives, setObjectives] = useState([
     { id: 1, name: 'The Slalom', pts: 100 },
@@ -16,7 +16,6 @@ function App() {
   const [newUnit, setNewUnit] = useState({ id: '', name: '', school: '' });
   const [searchQuery, setSearchQuery] = useState("");
 
-  // --- MISSION & MEDIA STATES ---
   const [screen, setScreen] = useState('home'); 
   const [selectedUnit, setSelectedUnit] = useState(null);
   const [archive, setArchive] = useState([]);
