@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* If Tailwind v4 is being stubborn, these variables will fix the colors */
+
 @theme {
   --color-robo-bg: #0B1118;
   --color-robo-card: #161C24;
@@ -12,12 +12,11 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: #0B1118 !important; /* Force dark background */
+  background-color: #0B1118 !important; 
   color: white;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
-/* The scanning animation for the camera screen */
 @keyframes scan {
   0% { transform: translateY(-100%); }
   100% { transform: translateY(100%); }
